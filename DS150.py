@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+import math
+import matplotlib.pyplot as plt
 import math
 
 
@@ -40,7 +44,7 @@ def calculate_mutual_information(vector1, vector2):
         pair = f"{vector1[x]},{vector2[x]}"
         total_pairs.append(pair)
 
-    unique_pairs = list(set(total_pairs))
+    unique_pairs = set(total_pairs)
     joint_entropy = 0
     total_pair_count = len(total_pairs)
 
@@ -54,10 +58,25 @@ def calculate_mutual_information(vector1, vector2):
     return mutual_information
 
 
-# Input vectors
-vector1 = [4, 3, 2, 1, 3]
-vector2 = [4, 3, 2, 1, 3]
+# Load the Iris dataset
+file_path = '/mnt/data/Iris_Dataset.csv'
+iris_data = pd.read_csv(file_path)
+
+# Convert the selected columns to discrete integer values (bins for mutual information calculation)
+iris_data['SepalLengthCm'] = pd.cut(iris_data['SepalLengthCm'], bins=10, labels=range(10)).astype(int)
+iris_data['SepalWidthCm'] = pd.cut(iris_data['SepalWidthCm'], bins=10, labels=range(10)).astype(int)
+
+# Select two columns for mutual information calculation
+vector1 = iris_data['SepalLengthCm'].tolist()
+vector2 = iris_data['SepalWidthCm'].tolist()
 
 # Calculate and print mutual information
-i = calculate_mutual_information(vector1, vector2)
-print(i)
+mi = calculate_mutual_information(vector1, vector2)
+print("Mutual Information:",mi)
+
+# Plot the selected columns
+plt.scatter(iris_data['SepalLengthCm'], iris_data['SepalWidthCm'], alpha=0.7)
+plt.title("Scatter Plot of SepalLengthCm vs SepalWidthCm")
+plt.xlabel("Sepal Length (cm)")
+plt.ylabel("Sepal Width (cm)")
+plt.show()
