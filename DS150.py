@@ -2,7 +2,6 @@ import pandas as pd
 import numpy as np
 import math
 import matplotlib.pyplot as plt
-import math
 
 
 def calculate_mutual_information(vector1, vector2):
